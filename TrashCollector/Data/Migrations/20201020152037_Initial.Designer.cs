@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollector.Data;
 
 namespace TrashCollector.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201020152037_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,8 +50,8 @@ namespace TrashCollector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7bbd1022-288d-4a66-a121-dd0e4d50eb8a",
-                            ConcurrencyStamp = "bef602f1-3bfc-4d21-b5b2-a31d7acb45b9",
+                            Id = "48342312-18d1-45f9-8e97-edf16b65e8c4",
+                            ConcurrencyStamp = "01732e68-6a24-4cdf-b6db-d0eedb5a4418",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
