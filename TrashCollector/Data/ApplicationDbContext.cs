@@ -10,12 +10,13 @@ namespace TrashCollector.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        DbSet<Customer> Customers { get; set; }
+        DbSet<Employee> Employees { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-        DbSet<Customer> Customers;
-        DbSet<Employee> Employees;
+        
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -24,8 +25,16 @@ namespace TrashCollector.Data
             .HasData(
             new IdentityRole
             {
-                Name = "Admin",
-                NormalizedName = "ADMIN"
+                Name = "Customer",
+                NormalizedName = "Customer"
+            });
+            base.OnModelCreating(builder);
+            builder.Entity<IdentityRole>()
+            .HasData(
+            new IdentityRole
+            {
+                Name = "Employee",
+                NormalizedName = "Employee"
             }
             );
         }

@@ -2,32 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TrashCollector.Data;
 
 namespace TrashCollector.Controllers
 {
-    public class EmployeeController : Controller
+    [Authorize(Roles = "Customer")]
+    public class CustomersController : Controller
     {
-        // GET: EmployeeController
+        private ApplicationDbContext _db;
+        public CustomersController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+        // GET: CustomerController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: EmployeeController/Details/5
+        // GET: CustomerController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: EmployeeController/Create
+        // GET: CustomerController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: EmployeeController/Create
+        // POST: CustomerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -42,13 +50,13 @@ namespace TrashCollector.Controllers
             }
         }
 
-        // GET: EmployeeController/Edit/5
+        // GET: CustomerController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: EmployeeController/Edit/5
+        // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -63,13 +71,13 @@ namespace TrashCollector.Controllers
             }
         }
 
-        // GET: EmployeeController/Delete/5
+        // GET: CustomerController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: EmployeeController/Delete/5
+        // POST: CustomerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
