@@ -16,5 +16,10 @@ namespace TrashCollector.Models
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int RouteZipCode { get; set; }
+        [NotMapped]
+        public List<Pickup> Pickups { get; set; }
     }
 }
