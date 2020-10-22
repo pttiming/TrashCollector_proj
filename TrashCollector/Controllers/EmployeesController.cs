@@ -24,14 +24,15 @@ namespace TrashCollector.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employeeId = _db.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
-            var employee = _db.Employees.Where(e => e.IdentityUserId == userId).ToList();
-
+            var employee = _db.Employees.Find(employeeId);
+            
 
             if (employeeId == null)
             {
                 return RedirectToAction(nameof(Create));
             }
-            return View(employee);
+            var pickups = _db.Pickups.Where(p => p.PickupZipCode == employee.RouteZipCode).ToList();
+            return View(pickups);
         }
 
         // GET: EmployeeController/Details/5
@@ -51,10 +52,14 @@ namespace TrashCollector.Controllers
         // POST: EmployeeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Employee employee)
         {
             try
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                employee.IdentityUserId = userId;
+                _db.Add(employee);
+                _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch

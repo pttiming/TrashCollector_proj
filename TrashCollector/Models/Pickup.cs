@@ -17,6 +17,7 @@ namespace TrashCollector.Models
         public int PickupZipCode { get; set; }
         
         public DateTime ActualPickupDate { get; set; }
+        [DataType(DataType.Date)]
         public DateTime ScheduledPickupDate { get; set; }
         public bool IsComplete { get; set; }
         public bool IsOneOff { get; set; }

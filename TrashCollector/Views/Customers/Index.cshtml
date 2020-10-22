@@ -9,7 +9,11 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
+<table class="table">
+    <tr>
+        
+    </tr>
+</table>
 <table class="table">
     <thead>
         <tr>
@@ -83,10 +87,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-            <button type="submit" asp-action="Suspend" asp-route-id="@item.Id" class="btn btn-primary" name="Suspend"  title="Temporarily Suspend Pickups"></button>
+                <a class="btn btn-danger" asp-action="Suspend" asp-route-id="@item.Id">Suspend</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                <a class="btn btn-danger" asp-action="CreatePickup" asp-route-id="@item.Id">CreatePickup</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdentityUser.Id)

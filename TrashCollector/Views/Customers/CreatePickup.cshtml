@@ -1,0 +1,72 @@
+﻿@model TrashCollector.Models.Pickup
+
+@{
+    ViewData["Title"] = "CreatePickup";
+}
+
+<h1>CreatePickup</h1>
+
+<h4>Pickup</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreatePickup">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="PickupZipCode" class="control-label"></label>
+                <input asp-for="PickupZipCode" class="form-control" />
+                <span asp-validation-for="PickupZipCode" class="text-danger"></span>
+            </div>*@
+            @*<div class="form-group">
+                <label asp-for="ActualPickupDate" class="control-label"></label>
+                <input asp-for="ActualPickupDate" class="form-control" />
+                <span asp-validation-for="ActualPickupDate" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="ScheduledPickupDate" class="control-label"></label>
+                <input asp-for="ScheduledPickupDate" class="form-control" />
+                <span asp-validation-for="ScheduledPickupDate" class="text-danger"></span>
+            </div>
+            @*<div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsComplete" /> @Html.DisplayNameFor(model => model.IsComplete)
+                </label>
+            </div>*@
+            @*<div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsOneOff" /> @Html.DisplayNameFor(model => model.IsOneOff)
+                </label>
+            </div>*@
+            @*<div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>*@
+            @*<div class="form-group">
+                <label asp-for="AmountCharged" class="control-label"></label>
+                <input asp-for="AmountCharged" class="form-control" />
+                <span asp-validation-for="AmountCharged" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AmountPaid" class="control-label"></label>
+                <input asp-for="AmountPaid" class="form-control" />
+                <span asp-validation-for="AmountPaid" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

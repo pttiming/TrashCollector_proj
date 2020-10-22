@@ -67,6 +67,30 @@ namespace TrashCollector.Controllers
                 return View();
             }
         }
+        // GET: CustomerController/Create
+        public ActionResult CreatePickup()
+        {
+            return View();
+        }
+
+        // POST: CustomerController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreatePickup(Pickup pickup)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customer = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+                _db.Add(pickup);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         // GET: CustomerController/Edit/5
         public ActionResult Edit(int id)
