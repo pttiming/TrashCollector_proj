@@ -1,0 +1,41 @@
+﻿@model TrashCollector.Models.Customer
+
+@{
+    ViewData["Title"] = "Suspend";
+}
+
+<h1>Suspend</h1>
+
+<h4>Customer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Suspend">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="isActive" />
+            <div class="form-group">
+                <label asp-for="stopPickup" class="control-label"></label>
+                <input asp-for="stopPickup" type="date" value="@if (Model.stopPickup.Year < 1980) { DateTime.Now} " class="form-control" />
+                <span asp-validation-for="stopPickup" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="restartPickup" class="control-label"></label>
+                <input asp-for="restartPickup" type="date" value="@DateTime.Now" class="form-control" />
+                <span asp-validation-for="restartPickup" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Return to Main Menu</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
