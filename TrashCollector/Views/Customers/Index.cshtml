@@ -13,10 +13,67 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdentityUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LocationID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.pickupDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.pickupDay.DayOfWeek)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.stopPickup)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.restartPickup)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.extraPickup)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.customerBalance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.currentMonthlyBalance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.weeklyPickupCompleted)
             </th>
             <th></th>
         </tr>
@@ -25,10 +82,67 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdentityUser.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LocationID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pickupDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pickupDay.DayOfWeek)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stopPickup)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.restartPickup)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.extraPickup)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.customerBalance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.currentMonthlyBalance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.weeklyPickupCompleted)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

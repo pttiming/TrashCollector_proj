@@ -10,8 +10,8 @@ namespace TrashCollector.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        DbSet<Customer> Customers { get; set; }
-        DbSet<Employee> Employees { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -37,6 +37,12 @@ namespace TrashCollector.Data
                 NormalizedName = "Employee"
             }
             );
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(
+                "Server=(localdb)\\mssqllocaldb;Database=aspnet-TrashCollector-EF4F3149-D88A-4B3F-9179-B2826ABF6E69;Trusted_Connection=True;MultipleActiveResultSets=true",
+                x => x.UseNetTopologySuite());
         }
 
     }

@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollector.Data;
 
-namespace TrashCollector.Data.Migrations
+namespace TrashCollector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201021200548_ControllerUpdate2")]
-    partial class ControllerUpdate2
+    [Migration("20201022030122_Initial6")]
+    partial class Initial6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,15 +50,15 @@ namespace TrashCollector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0c3cd651-c53c-41e2-bb57-9ab10899fafc",
-                            ConcurrencyStamp = "60fb171d-ffef-4e26-bbce-6b23b3a32faa",
+                            Id = "e6bc15ac-aa60-4767-b7f9-ffc75c3d0e93",
+                            ConcurrencyStamp = "b0d6f916-bd7c-4f40-bb17-037fccd5fcab",
                             Name = "Customer",
                             NormalizedName = "Customer"
                         },
                         new
                         {
-                            Id = "f82f1cc3-1731-4104-80d9-cad9c9589c38",
-                            ConcurrencyStamp = "3b35d53d-10d5-4232-9410-93553fab58bb",
+                            Id = "951b8a27-16da-46f2-9fa8-286d27025082",
+                            ConcurrencyStamp = "9d2f1055-d88a-4bfd-9da6-36d7a503a443",
                             Name = "Employee",
                             NormalizedName = "Employee"
                         });
@@ -240,11 +240,65 @@ namespace TrashCollector.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(10, 8)");
+
+                    b.Property<string>("LocationID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(11, 8)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
+
+                    b.Property<double>("currentMonthlyBalance")
+                        .HasColumnType("float");
+
+                    b.Property<double>("customerBalance")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("extraPickup")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("pickupDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("restartPickup")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("stopPickup")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("weeklyPickupCompleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

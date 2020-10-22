@@ -3,15 +3,18 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using TrashCollector.Data;
 
-namespace TrashCollector.Data.Migrations
+namespace TrashCollector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201022030935_Initial7")]
+    partial class Initial7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,15 +51,15 @@ namespace TrashCollector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0c3cd651-c53c-41e2-bb57-9ab10899fafc",
-                            ConcurrencyStamp = "60fb171d-ffef-4e26-bbce-6b23b3a32faa",
+                            Id = "a24cf2d4-723e-49ff-bbaf-5f0b7323c3a8",
+                            ConcurrencyStamp = "a307ba33-9c2e-4a3b-8f54-f864bac6bb2d",
                             Name = "Customer",
                             NormalizedName = "Customer"
                         },
                         new
                         {
-                            Id = "f82f1cc3-1731-4104-80d9-cad9c9589c38",
-                            ConcurrencyStamp = "3b35d53d-10d5-4232-9410-93553fab58bb",
+                            Id = "de652f6d-076a-43ad-9908-6113d92f6708",
+                            ConcurrencyStamp = "29638cd3-bffd-4162-8f3b-6a37cb4efeff",
                             Name = "Employee",
                             NormalizedName = "Employee"
                         });
@@ -238,11 +241,65 @@ namespace TrashCollector.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(10, 8)");
+
+                    b.Property<Geometry>("LocationID")
+                        .HasColumnType("geography");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(11, 8)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
+
+                    b.Property<double>("currentMonthlyBalance")
+                        .HasColumnType("float");
+
+                    b.Property<double>("customerBalance")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("extraPickup")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("pickupDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("restartPickup")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("stopPickup")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("weeklyPickupCompleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
