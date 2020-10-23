@@ -15,7 +15,6 @@ namespace TrashCollector.Models
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
         public int PickupZipCode { get; set; }
-        
         public DateTime ActualPickupDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime ScheduledPickupDate { get; set; }
@@ -34,6 +33,7 @@ namespace TrashCollector.Models
         public Pickup()
         {
             IsActive = true;
+
         }
 
 

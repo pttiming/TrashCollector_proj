@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TrashCollector.Models;
 
 namespace TrashCollector.Controllers
 {
@@ -30,7 +31,7 @@ namespace TrashCollector.Controllers
         // POST: PickupsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Pickup pickup)
         {
             try
             {
@@ -51,7 +52,7 @@ namespace TrashCollector.Controllers
         // POST: PickupsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Pickup pickup)
         {
             try
             {
@@ -72,7 +73,7 @@ namespace TrashCollector.Controllers
         // POST: PickupsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Pickup pickup)
         {
             try
             {

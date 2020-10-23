@@ -34,7 +34,6 @@ namespace TrashCollector.Models
         public decimal Longitude { get; set; }
         [DataType(DataType.Date)]
         public DateTime pickupDay { get; set; }
-
         public bool isActive { get; set; }
         [DataType(DataType.Date)]
         public DateTime stopPickup { get; set; }

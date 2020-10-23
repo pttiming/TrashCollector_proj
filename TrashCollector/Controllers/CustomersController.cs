@@ -82,11 +82,14 @@ namespace TrashCollector.Controllers
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var customer = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-                _db.Add(pickup);
+                pickup.CustomerId = customer.Id;
+                pickup.PickupZipCode = customer.ZipCode;
+                pickup.IsActive = true;
+                _db.Pickups.Add(pickup);
                 _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception e)
             {
                 return View();
             }
