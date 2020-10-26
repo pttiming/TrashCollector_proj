@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using TrashCollector.Data;
@@ -10,9 +11,10 @@ using TrashCollector.Data;
 namespace TrashCollector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201023152533_customerpickups")]
+    partial class customerpickups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,15 +51,15 @@ namespace TrashCollector.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5f57c34a-f0a7-4950-8304-d0fbfca137ea",
-                            ConcurrencyStamp = "e4daefa5-9244-4fee-8f69-d5ea8d746207",
+                            Id = "a91521a2-ac5e-4aea-ab80-37d949d22e09",
+                            ConcurrencyStamp = "fb7cb0ff-ed7c-4348-b0e3-6eb09cf0943d",
                             Name = "Customer",
                             NormalizedName = "Customer"
                         },
                         new
                         {
-                            Id = "1c55f324-2f85-441e-98bd-78b7a2661f7b",
-                            ConcurrencyStamp = "de6edea0-de86-4d29-8a4c-0c236e10b28e",
+                            Id = "6263880d-426f-46d3-9186-d32d453fc65b",
+                            ConcurrencyStamp = "940769fb-d816-4d4f-b800-3ceead1fe210",
                             Name = "Employee",
                             NormalizedName = "Employee"
                         });
@@ -250,9 +252,6 @@ namespace TrashCollector.Migrations
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");

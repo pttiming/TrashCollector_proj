@@ -24,14 +24,14 @@ namespace TrashCollector.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employeeId = _db.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
-            var employee = _db.Employees.Find(employeeId);
+            //var employee = _db.Employees.Find(employeeId);
             
 
             if (employeeId == null)
             {
                 return RedirectToAction(nameof(Create));
             }
-            var pickups = _db.Pickups.Where(p => p.PickupZipCode == employee.RouteZipCode).ToList();
+            var pickups = _db.Pickups.Where(p => p.PickupZipCode == employeeId.RouteZipCode).ToList();
             return View(pickups);
         }
 

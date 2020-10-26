@@ -36,6 +36,11 @@ namespace TrashCollector.Models
 
         }
 
+        private void CheckForSuspension()
+        {
+            IsActive = ScheduledPickupDate >= Customer.stopPickup && ScheduledPickupDate < Customer.restartPickup ? false : true;
+        }
+
 
     }
 }

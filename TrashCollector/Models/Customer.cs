@@ -35,18 +35,23 @@ namespace TrashCollector.Models
         [DataType(DataType.Date)]
         public DateTime pickupDay { get; set; }
         public bool isActive { get; set; }
+        [Display(Name = "Date to Begin Suspension")]
         [DataType(DataType.Date)]
         public DateTime stopPickup { get; set; }
+        [Display(Name = "Date to Resume Pickups")]
         [DataType(DataType.Date)]
         public DateTime restartPickup { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime extraPickup { get; set; }
-
-        public double customerBalance { get; set; }
-
-        public double currentMonthlyBalance { get; set; }
-
-        public bool weeklyPickupCompleted { get; set; }
+        [Range(1, 100)]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal customerBalance { get; set; }
+        [Range(1, 100)]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal currentMonthlyBalance { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
+        [NotMapped]
+        public List<Pickup> Pickups { get; set; }
 
 
 

@@ -1,161 +1,166 @@
-﻿@model IEnumerable<TrashCollector.Models.Customer>
- 
+﻿@model IEnumerable<TrashCollector.Models.Pickup>
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Home";
 }
 
-<h1>Index</h1>
+<h1>Main Menu</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <tr>
+<div class="container-md">
+    <table class="table-secondary">
+        <thead>
+            <tr>
+                <th>
+                    <a class="btn btn-primary" asp-action="CreateSinglePickup" asp-route-id="">Create One Time Pickup</a>
+                </th>
+                <th>
+                    <a class="btn btn-primary" asp-action="Suspend" asp-route-id="">Suspend Pickups</a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
         
-    </tr>
-</table>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ZipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LocationID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Latitude)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Longitude)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.pickupDay)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.pickupDay.DayOfWeek)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.stopPickup)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.restartPickup)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.extraPickup)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.customerBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.currentMonthlyBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.weeklyPickupCompleted)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a class="btn btn-danger" asp-action="Suspend" asp-route-id="@item.Id">Suspend</a>
-            </td>
-            <td>
-                <a class="btn btn-danger" asp-action="CreatePickup" asp-route-id="">CreatePickup</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Latitude)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Longitude)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.pickupDay)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.pickupDay.DayOfWeek)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.stopPickup)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.restartPickup)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.extraPickup)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.customerBalance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.currentMonthlyBalance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.weeklyPickupCompleted)
-            </td>
-            <td>
-                <a class="btn btn-danger" asp-action="Suspend" asp-route-id="@item.Id">Suspend</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </table>
+    </div>
+<div class="container-md">
+    <h4>Upcoming Pickups</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ScheduledPickupDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ScheduledPickupDate.DayOfWeek)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+                @if (item.IsActive)
+                    {
+
+                {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ScheduledPickupDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ScheduledPickupDate.DayOfWeek)
+                    </td>
+                    
+                    <td>
+                        <a class="btn btn-primary" asp-action="SuspendSingle" asp-route-id="@item.Id">Suspend</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+                        }
+                    }
+        </tbody>
+    </table>
+</div>
+<div class="container-md">
+    <h4>Completed Pickups</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualPickupDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ScheduledPickupDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AmountCharged)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AmountPaid)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+                @if (item.IsComplete)
+                {
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ActualPickupDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ScheduledPickupDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AmountCharged)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AmountPaid)
+                            </td>
+                            <td>
+                                <a class="btn-danger" asp-action="Edit" asp-route-id="@item.Id">Make Payment</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+<div class="container-md">
+    <h4>Suspended Pickups</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualPickupDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ScheduledPickupDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AmountCharged)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AmountPaid)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+                @if (item.IsActive == false && item.ScheduledPickupDate.Date >= DateTime.Today)
+                {
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ActualPickupDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ScheduledPickupDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AmountCharged)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AmountPaid)
+                            </td>
+                            <td>
+                                <a class="btn-danger" asp-action="Edit" asp-route-id="@item.Id">Make Payment</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
