@@ -56,7 +56,8 @@
                         @if (item.IsOneOff) {  } else { Console.WriteLine("Weekly Pickup"); }
                     <td>
                         <a class="btn btn-primary" asp-action="SuspendSingle" asp-route-id="@item.Id">Suspend this Pickup</a> |
-                        @if (!item.IsOneOff) {<a class="btn btn-primary" asp-action="EditPickup" asp-route-id="@item.CustomerId">Change Weekly Pickup Day</a>}
+                        @if (!item.IsOneOff) {<a class="btn btn-primary" asp-action="EditPickup" asp-route-id="@item.CustomerId">Change Weekly Pickup Day</a>} |
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Customer.Id">View Balance Info</a>
                     </td>
                 </tr>
                     }
@@ -102,9 +103,8 @@
                                 @Html.DisplayFor(modelItem => item.AmountPaid)
                             </td>
                             <td>
-                                <a class="btn-danger" asp-action="Edit" asp-route-id="@item.Id">Make Payment</a> |
-                                <a asp-action="Details" asp-route-id="@item.Customer.Id">CustomerDetails</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a class="btn-danger" asp-action="MakePayment" asp-route-id="@item.Id">Make Payment</a> |
+                                <a class="btn-danger"asp-action="Details" asp-route-id="@item.Customer.Id">View Balance Info</a> |
                             </td>
                         </tr>
                     }

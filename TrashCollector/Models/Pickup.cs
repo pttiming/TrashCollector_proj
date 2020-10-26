@@ -28,10 +28,12 @@ namespace TrashCollector.Models
         [Range(1, 100)]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
+        [Display(Name = "Pickup Charge")]
         public decimal AmountCharged { get; set; }
         [Range(1, 100)]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
+        [Display(Name = "Amout Paid")]
         public decimal AmountPaid { get; set; }
 
         public Pickup()
