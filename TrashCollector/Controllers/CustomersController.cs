@@ -12,6 +12,7 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite;
 using Stripe.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace TrashCollector.Controllers
 {
@@ -27,15 +28,15 @@ namespace TrashCollector.Controllers
         public ActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customerId = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            //var customer = _db.Customers.Where(c => c.IdentityUserId == userId).ToList();
+            var customer = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
 
-            if (customerId == null)
+            if (customer == null)
             {
                 return RedirectToAction(nameof(Create));
             }
-            customerId.Pickups = _db.Pickups.Where(p => p.CustomerId == customerId.Id).ToList();
-            return View(customerId.Pickups);
+            customer.Pickups = _db.Pickups.Where(p => p.CustomerId == customer.Id).ToList();
+            UpdateBalanceInfo(customer);
+            return View(customer.Pickups);
         }
 
         // GET: CustomerController/Details/5
@@ -63,6 +64,7 @@ namespace TrashCollector.Controllers
                 _db.Add(customer);
                 _db.SaveChanges();
                 CreateInitialPickup(customer);
+                UpdateBalanceInfo(customer);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -70,56 +72,7 @@ namespace TrashCollector.Controllers
                 return View();
             }
         }
-        // GET: CustomerController/Create
-        public ActionResult CreatePickup()
-        {
-            return View();
-        }
-
-        public ActionResult CreatePickup(DateTime date)
-        {
-            try
-            {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var customer = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-                Pickup pickup = new Pickup();
-                pickup.CustomerId = customer.Id;
-                pickup.PickupZipCode = customer.ZipCode;
-                pickup.IsActive = true;
-                customer.pickupDay = date;
-                _db.Pickups.Add(pickup);
-                _db.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception e)
-            {
-                return View();
-            }
-        }
-
-        // POST: CustomerController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreatePickup(Pickup pickup)
-        {
-            try
-            {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var customer = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-                pickup.CustomerId = customer.Id;
-                pickup.PickupZipCode = customer.ZipCode;
-                pickup.IsActive = true;
-                customer.pickupDay = pickup.ScheduledPickupDate;
-                _db.Pickups.Add(pickup);
-                _db.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            catch(Exception e)
-            {
-                return View();
-            }
-        }
-        // GET: CustomerController/Create
+        
         public ActionResult CreateSinglePickup()
         {
             return View();
@@ -162,6 +115,32 @@ namespace TrashCollector.Controllers
         {
             try
             {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        // GET: CustomerController/Edit/5
+        public ActionResult EditPickup(int id)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            return View(customer);
+        }
+
+        // POST: CustomerController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPickup(int id, Customer customer)
+        {
+            try
+            {
+                var customerToUpdate = _db.Customers.Find(id);
+                customerToUpdate.DayOfWeek = customer.DayOfWeek;
+                _db.SaveChanges();
+                UpdateRegularPickups(customerToUpdate);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -246,5 +225,60 @@ namespace TrashCollector.Controllers
             _db.SaveChanges();
 
         }
+
+        public void UpdateRegularPickups(Customer customer)
+        {
+            var pickupsToUpdate = _db.Pickups.Where(p => p.CustomerId == customer.Id).Where(p => p.IsOneOff == false).Where(p => p.IsComplete == false).ToList();
+            foreach(Pickup pickup in pickupsToUpdate)
+            {
+                int daysToAdjustPickup = ((int)customer.DayOfWeek - (int)pickup.ScheduledPickupDate.DayOfWeek + 7) % 7;
+                pickup.ScheduledPickupDate = pickup.ScheduledPickupDate.AddDays(daysToAdjustPickup);
+            }
+            _db.SaveChanges();
+        }
+
+        public decimal GetTotalBalance(Customer customer)
+        {
+            var totalBalance = _db.Pickups.Where(p => p.IsComplete).Sum(p => p.AmountCharged);
+            return totalBalance;
+        }
+        public decimal GetMonthlyBalance(Customer customer)
+        {
+            var monthlyBalance = _db.Pickups.Where(p => p.IsComplete).Where(p => p.ScheduledPickupDate.Month == DateTime.Now.Month).Sum(p=>p.AmountCharged);
+            return monthlyBalance;
+        }
+
+        public decimal GetCurrentMonthsPayments(Customer customer)
+        {
+            var currentMonthsPayments = _db.Pickups.Where(p => p.IsComplete).Where(p => p.ScheduledPickupDate.Month == DateTime.Now.Month).Sum(p => p.AmountPaid);
+            return currentMonthsPayments;
+        }
+
+        public decimal OpenBalance(Customer customer)
+        {
+            var openBalance = GetTotalBalance(customer) - GetTotalPayments(customer);
+            return openBalance;
+            
+        }
+
+        public decimal CurrentMonthBalance(Customer customer)
+        {
+            var currentMonthBalance = GetMonthlyBalance(customer) - GetCurrentMonthsPayments(customer);
+            return currentMonthBalance;
+        }
+        public decimal GetTotalPayments(Customer customer)
+        {
+            var totalPayments = _db.Pickups.Where(p => p.IsComplete).Sum(p => p.AmountPaid);
+            return totalPayments;
+        }
+
+        public void UpdateBalanceInfo(Customer customer)
+        {
+            customer.customerBalance = OpenBalance(customer);
+            customer.currentMonthlyBalance = CurrentMonthBalance(customer);
+            customer.currentMonthlyCharges = GetMonthlyBalance(customer);
+            _db.SaveChanges();
+        }
+
     }
 }

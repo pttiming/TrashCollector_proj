@@ -49,6 +49,10 @@ namespace TrashCollector.Models
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal currentMonthlyBalance { get; set; }
+        [Range(1, 100)]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal currentMonthlyCharges { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         [NotMapped]
         public List<Pickup> Pickups { get; set; }

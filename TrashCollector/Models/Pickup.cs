@@ -28,7 +28,7 @@ namespace TrashCollector.Models
         [Range(1, 100)]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
-        public double AmountPaid { get; set; }
+        public decimal AmountPaid { get; set; }
 
         public Pickup()
         {

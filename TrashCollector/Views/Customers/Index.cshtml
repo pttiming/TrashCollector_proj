@@ -19,12 +19,51 @@
                 <th>
                     <a class="btn btn-primary" asp-action="Suspend" asp-route-id="">Suspend Pickups</a>
                 </th>
-                <th></th>
+                <th>
+                    
+                </th>
             </tr>
         </thead>
         
         </table>
     </div>
+<div class="container-md">
+    <h4>Balance Information</h4>
+    <table class="table-secondary">
+        <thead>
+            <tr>
+                <th>
+                    Total Charges for Current Month: @Html.DisplayNameFor(model => model.Customer.currentMonthlyCharges)
+                </th>
+                <th>
+                    Total Currently Owed for this Month: @Html.DisplayNameFor(model => model.Customer.currentMonthlyBalance)
+                </th>
+                <th>
+                    Total Currently Owed for all Pickups: @Html.DisplayNameFor(model => model.Customer.customerBalance)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+                           
+                   
+                        <tr>
+
+                            <td>
+                                
+                            </td>
+                            <td>
+                                
+                            </td>
+
+                            <td>
+                                
+                            </td>
+                        </tr>
+                 
+               
+            </tbody>
+        </table>
+</div>
 <div class="container-md">
     <h4>Upcoming Pickups</h4>
     <table class="table">
@@ -55,10 +94,8 @@
                     </td>
                     
                     <td>
-                        <a class="btn btn-primary" asp-action="SuspendSingle" asp-route-id="@item.Id">Suspend</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a class="btn btn-primary" asp-action="SuspendSingle" asp-route-id="@item.Id">Suspend</a> |
+                        @if (!item.IsOneOff) {<a class="btn btn-primary" asp-action="EditPickup" asp-route-id="@item.CustomerId">Change Weekly Pickup Day</a>}
                     </td>
                 </tr>
                         }
