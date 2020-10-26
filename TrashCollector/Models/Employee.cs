@@ -18,6 +18,10 @@ namespace TrashCollector.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int RouteZipCode { get; set; }
+        [Column(TypeName = "decimal(10, 8)")]
+        public decimal Latitude { get; set; }
+        [Column(TypeName = "decimal(11, 8)")]
+        public decimal Longitude { get; set; }
         [NotMapped]
         public List<Pickup> Pickups { get; set; }
     }

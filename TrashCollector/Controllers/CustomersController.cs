@@ -53,8 +53,8 @@ namespace TrashCollector.Controllers
         // GET: CustomerController/Details/5
         public ActionResult Details(int id)
         {
-
-            return View();
+            var customerToView = _db.Customers.Find(id);
+            return View(customerToView);
         }
 
         // GET: CustomerController/Create

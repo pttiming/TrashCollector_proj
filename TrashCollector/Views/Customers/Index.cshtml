@@ -143,7 +143,7 @@
                             </td>
                             <td>
                                 <a class="btn-danger" asp-action="Edit" asp-route-id="@item.Id">Make Payment</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Details" asp-route-id="@item.Customer.Id">CustomerDetails</a> |
                                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                             </td>
                         </tr>
@@ -192,7 +192,7 @@
                             </td>
                             <td>
                                 <a class="btn-danger" asp-action="Edit" asp-route-id="@item.Id">Make Payment</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Details" asp-route-id="@item.Customer.Id">CustomerDetails</a> |
                                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                             </td>
                         </tr>
