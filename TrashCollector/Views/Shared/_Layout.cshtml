@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://maps.googleapis.com/maps/api/js?key=@APIKey.googleMapsApi&callback=initMap&libraries=&v=weekly"
             defer></script>
+   
 </head>
 <body>
     <header>
@@ -30,6 +32,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Employees" asp-action="IndexAll">View All Customers</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Customers by Pickup Day</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-controller="Employees" asp-action="IndexDay" asp-route-id=0> Sunday</a>
+                                    <a class="dropdown-item" asp-controller="Employees" asp-action="IndexDay" asp-route-id="1"> Monday</a>
+                                    <a class="dropdown-item" asp-controller="Employees" asp-action="IndexDay" asp-route-id="2"> Tuesday</a>
+                                    <a class="dropdown-item" asp-controller="Employees" asp-action="IndexDay" asp-route-id="3"> Wednesday</a>
+                                    <a class="dropdown-item" asp-controller="Employees" asp-action="IndexDay" asp-route-id="4"> Thursday</a>
+                                    <a class="dropdown-item" asp-controller="Employees" asp-action="IndexDay" asp-route-id="5"> Friday</a>
+                                    <a class="dropdown-item" asp-controller="Employees" asp-action="IndexDay" asp-route-id="6"> Saturday</a>
+                                </div>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

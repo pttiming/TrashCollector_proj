@@ -15,11 +15,13 @@ using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using TrashCollector.ActionFilters;
+using Stripe;
 
 namespace TrashCollector
 {
     public class Startup
     {
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

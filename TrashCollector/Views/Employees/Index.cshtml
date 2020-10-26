@@ -1,44 +1,23 @@
 ﻿@model IEnumerable<TrashCollector.Models.Pickup>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pickups";
 }
 
-<h1>Index</h1>
+<h3>Pickups</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
-    <h4>Today's Incomplete Pickups</h4>
+    <h3>Today's Incomplete Pickups</h3>
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Customer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PickupZipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActualPickupDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ScheduledPickupDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsComplete)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsOneOff)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AmountCharged)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AmountPaid)
+                @Html.DisplayNameFor(model => model.Customer.Address1)
             </th>
             <th></th>
         </tr>
@@ -50,34 +29,14 @@
                 @Html.DisplayFor(modelItem => item.Customer.FirstName) @Html.DisplayFor(modelItem => item.Customer.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PickupZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActualPickupDate)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.ScheduledPickupDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsComplete)
+                @Html.DisplayFor(modelItem => item.Customer.Address1)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsOneOff)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AmountCharged)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AmountPaid)
-            </td>
-            <td>
-                <a class="btn btn-primary" asp-action="CompletePickup" asp-route-id="@item.Id">Mark as Completed</a>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-controller="Customers" asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a class="btn btn-primary" asp-action="CompletePickup" asp-route-id="@item.Id">Mark as Completed</a> |
+                <a class="btn btn-primary" asp-controller="Employees" asp-action="Details" asp-route-id="@item.CustomerId">Details</a>
             </td>
         </tr>
 }
@@ -91,7 +50,7 @@
                 @Html.DisplayNameFor(model => model.Customer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PickupZipCode)
+                @Html.DisplayNameFor(model => model.Customer.Address1)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ActualPickupDate)
@@ -100,21 +59,11 @@
                 @Html.DisplayNameFor(model => model.ScheduledPickupDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsComplete)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsOneOff)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.AmountCharged)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AmountPaid)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -122,10 +71,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Customer.FirstName)
+                    @Html.DisplayFor(modelItem => item.Customer.FirstName) @Html.DisplayFor(modelItem => item.Customer.FirstName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PickupZipCode)
+                    @Html.DisplayFor(modelItem => item.Customer.Address1)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ActualPickupDate)
@@ -134,24 +83,10 @@
                     @Html.DisplayFor(modelItem => item.ScheduledPickupDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsComplete)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsOneOff)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.AmountCharged)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AmountPaid)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="Customers" asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }

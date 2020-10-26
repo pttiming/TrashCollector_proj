@@ -21,7 +21,7 @@ using Newtonsoft.Json.Linq;
 
 namespace TrashCollector.Controllers
 {
-    //[Authorize(Roles = "Customer")]
+    [Authorize(Roles = "Customer")]
     public class CustomersController : Controller
     {
         private ApplicationDbContext _db;

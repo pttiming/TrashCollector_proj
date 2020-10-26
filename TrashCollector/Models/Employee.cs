@@ -24,5 +24,7 @@ namespace TrashCollector.Models
         public decimal Longitude { get; set; }
         [NotMapped]
         public List<Pickup> Pickups { get; set; }
+        
     }
+        
 }

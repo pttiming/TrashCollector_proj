@@ -45,12 +45,26 @@ namespace TrashCollector.Controllers
             var pickups = _db.Pickups.Where(p => p.PickupZipCode == employeeId.RouteZipCode).Include(p => p.Customer).ToList();
             return View(pickups);
         }
+        public ActionResult IndexAll()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employeeId = _db.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+            var customers = _db.Customers.Where(c => c.ZipCode == employeeId.RouteZipCode).ToList();
+            return View(customers);
+        }
+
+        public ActionResult IndexDay(int id)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employeeId = _db.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+            var customers = _db.Customers.Where(c => c.ZipCode == employeeId.RouteZipCode).Where(c => (int)c.DayOfWeek == id).ToList();
+            return View(customers);
+        }
 
         // GET: EmployeeController/Details/5
         public ActionResult Details(int id)
         {
             var customer = _db.Customers.Find(id);
-            
             return View(customer);
         }
 
