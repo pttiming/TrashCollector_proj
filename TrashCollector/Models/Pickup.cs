@@ -12,10 +12,14 @@ namespace TrashCollector.Models
         [Key]
         public int Id { get; set; }
         [ForeignKey("Customer")]
+        [Display(Name ="Customer Name")]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
+
         public int PickupZipCode { get; set; }
+        [Display(Name = "Completed")]
         public DateTime ActualPickupDate { get; set; }
+        [Display(Name = "Scheduled")]
         [DataType(DataType.Date)]
         public DateTime ScheduledPickupDate { get; set; }
         public bool IsComplete { get; set; }
@@ -35,12 +39,6 @@ namespace TrashCollector.Models
             IsActive = true;
 
         }
-
-        private void CheckForSuspension()
-        {
-            IsActive = ScheduledPickupDate >= Customer.stopPickup && ScheduledPickupDate < Customer.restartPickup ? false : true;
-        }
-
 
     }
 }

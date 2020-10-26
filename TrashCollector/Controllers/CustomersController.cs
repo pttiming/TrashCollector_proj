@@ -21,7 +21,7 @@ using Newtonsoft.Json.Linq;
 
 namespace TrashCollector.Controllers
 {
-    [Authorize(Roles = "Customer")]
+    //[Authorize(Roles = "Customer")]
     public class CustomersController : Controller
     {
         private ApplicationDbContext _db;
@@ -47,6 +47,7 @@ namespace TrashCollector.Controllers
             }
             customer.Pickups = _db.Pickups.Where(p => p.CustomerId == customer.Id).ToList();
             UpdateBalanceInfo(customer);
+            CreateAdditionalPickups(customer);
             return View(customer.Pickups);
         }
 
@@ -76,6 +77,7 @@ namespace TrashCollector.Controllers
                 _db.Add(customer);
                 _db.SaveChanges();
                 CreateInitialPickup(customer);
+                CreateAdditionalPickups(customer);
                 UpdateBalanceInfo(customer);
                 return RedirectToAction(nameof(Index));
             }
@@ -195,6 +197,14 @@ namespace TrashCollector.Controllers
         {
             var pickupToSuspend = _db.Pickups.Find(id);
             pickupToSuspend.IsActive = false;
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public ActionResult Reactivate(int id)
+        {
+            var pickupToActivate = _db.Pickups.Find(id);
+            pickupToActivate.IsActive = true;
             _db.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
@@ -322,8 +332,10 @@ namespace TrashCollector.Controllers
             return currentMonthsPayments;
         }
 
-        public decimal OpenBalance(Models.Customer customer)
+        public decimal OpenBalance()
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _db.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
             var openBalance = GetTotalBalance(customer) - GetTotalPayments(customer);
             return openBalance;
             
@@ -342,10 +354,31 @@ namespace TrashCollector.Controllers
 
         public void UpdateBalanceInfo(Models.Customer customer)
         {
-            customer.customerBalance = OpenBalance(customer);
+            customer.customerBalance = OpenBalance();
             customer.currentMonthlyBalance = CurrentMonthBalance(customer);
             customer.currentMonthlyCharges = GetMonthlyBalance(customer);
             _db.SaveChanges();
+        }
+        public void CreateAdditionalPickups(Models.Customer customer)
+        {
+            var pickups = _db.Pickups.Where(p => p.CustomerId == customer.Id).Where(p=>p.IsOneOff == false).ToList();
+            int pickupsCount = pickups.Count();
+            int pickupsToSchedule = 4;
+            int pickupsNeeded = pickupsToSchedule - pickupsCount;
+            if(pickupsNeeded > 0)
+            {
+                for (int i = 0; i < pickupsNeeded; i++)
+                {
+                    pickups = _db.Pickups.Where(p => p.CustomerId == customer.Id).Where(p => p.IsOneOff == false).ToList();
+                    Pickup pickup = new Pickup();
+                    pickup.CustomerId = customer.Id;
+                    pickup.PickupZipCode = customer.ZipCode;
+                    pickup.IsActive = true;
+                    pickup.ScheduledPickupDate = pickups[pickups.Count - 1].ScheduledPickupDate.AddDays(7);
+                    _db.Pickups.Add(pickup);
+                    _db.SaveChanges();
+                }
+            }
         }
 
 

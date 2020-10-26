@@ -6,9 +6,6 @@
 
 <h1>Main Menu</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <div class="container-md">
     <table class="table-secondary">
         <thead>
@@ -27,43 +24,7 @@
         
         </table>
     </div>
-<div class="container-md">
-    <h4>Balance Information</h4>
-    <table class="table-secondary">
-        <thead>
-            <tr>
-                <th>
-                    Total Charges for Current Month: @Html.DisplayNameFor(model => model.Customer.currentMonthlyCharges)
-                </th>
-                <th>
-                    Total Currently Owed for this Month: @Html.DisplayNameFor(model => model.Customer.currentMonthlyBalance)
-                </th>
-                <th>
-                    Total Currently Owed for all Pickups: @Html.DisplayNameFor(model => model.Customer.customerBalance)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-                           
-                   
-                        <tr>
 
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-
-                            <td>
-                                
-                            </td>
-                        </tr>
-                 
-               
-            </tbody>
-        </table>
-</div>
 <div class="container-md">
     <h4>Upcoming Pickups</h4>
     <table class="table">
@@ -73,16 +34,16 @@
                     @Html.DisplayNameFor(model => model.ScheduledPickupDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ScheduledPickupDate.DayOfWeek)
+                    Day of the Week
+                </th>
+                <th>
+                    Type of Pickup
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-                @if (item.IsActive)
-                    {
-
+            @foreach (var item in Model.Where(p => p.IsActive).Where(p => p.ScheduledPickupDate >= DateTime.Today))
                 {
                 <tr>
 
@@ -92,13 +53,12 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ScheduledPickupDate.DayOfWeek)
                     </td>
-                    
+                        @if (item.IsOneOff) {  } else { Console.WriteLine("Weekly Pickup"); }
                     <td>
-                        <a class="btn btn-primary" asp-action="SuspendSingle" asp-route-id="@item.Id">Suspend</a> |
+                        <a class="btn btn-primary" asp-action="SuspendSingle" asp-route-id="@item.Id">Suspend this Pickup</a> |
                         @if (!item.IsOneOff) {<a class="btn btn-primary" asp-action="EditPickup" asp-route-id="@item.CustomerId">Change Weekly Pickup Day</a>}
                     </td>
                 </tr>
-                        }
                     }
         </tbody>
     </table>
@@ -158,16 +118,13 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ActualPickupDate)
+                    Originally @Html.DisplayNameFor(model => model.ScheduledPickupDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ScheduledPickupDate)
+                   
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AmountCharged)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AmountPaid)
+                   
                 </th>
                 <th></th>
             </tr>
@@ -179,21 +136,16 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.ActualPickupDate)
-                            </td>
-                            <td>
                                 @Html.DisplayFor(modelItem => item.ScheduledPickupDate)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.AmountCharged)
+                                
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.AmountPaid)
+                                
                             </td>
                             <td>
-                                <a class="btn-danger" asp-action="Edit" asp-route-id="@item.Id">Make Payment</a> |
-                                <a asp-action="Details" asp-route-id="@item.Customer.Id">CustomerDetails</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a class="btn btn-success" asp-action="Reactivate" asp-route-id="@item.Id">Reactivate Pickup</a> 
                             </td>
                         </tr>
                     }

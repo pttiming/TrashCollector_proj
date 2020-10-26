@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TrashCollector.Data;
@@ -41,16 +42,16 @@ namespace TrashCollector.Controllers
             {
                 return RedirectToAction(nameof(Create));
             }
-            var pickups = _db.Pickups.Where(p => p.PickupZipCode == employeeId.RouteZipCode).ToList();
+            var pickups = _db.Pickups.Where(p => p.PickupZipCode == employeeId.RouteZipCode).Include(p => p.Customer).ToList();
             return View(pickups);
         }
 
         // GET: EmployeeController/Details/5
         public ActionResult Details(int id)
         {
-            var employee = _db.Employees.Find(id);
-            employee.Pickups = _db.Pickups.Where(p => p.PickupZipCode == employee.RouteZipCode).ToList();
-            return View();
+            var customer = _db.Customers.Find(id);
+            
+            return View(customer);
         }
 
         // GET: EmployeeController/Create
@@ -134,6 +135,24 @@ namespace TrashCollector.Controllers
             }
 
             return employee;
+        }
+
+        // GET: CustomerController/Edit/5
+        public ActionResult CompletePickup(int id)
+        {
+            var pickupToComplete = _db.Pickups.Find(id);
+            pickupToComplete.IsComplete = true;
+            if (pickupToComplete.IsOneOff)
+            {
+                pickupToComplete.AmountCharged = 20;
+            }
+            else
+            {
+                pickupToComplete.AmountCharged = 10;
+            }
+            pickupToComplete.ActualPickupDate = DateTime.Now;
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
