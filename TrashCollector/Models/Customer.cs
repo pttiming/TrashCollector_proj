@@ -32,9 +32,6 @@ namespace TrashCollector.Models
         public decimal Latitude { get; set; }
         [Column(TypeName = "decimal(11, 8)")]
         public decimal Longitude { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime pickupDay { get; set; }
-        public bool isActive { get; set; }
         [Display(Name = "Date to Begin Suspension")]
         [DataType(DataType.Date)]
         public DateTime stopPickup { get; set; }

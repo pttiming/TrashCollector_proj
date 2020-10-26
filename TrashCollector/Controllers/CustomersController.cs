@@ -13,6 +13,11 @@ using NetTopologySuite;
 using Stripe.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Stripe;
+using System.Text;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TrashCollector.Controllers
 {
@@ -20,10 +25,16 @@ namespace TrashCollector.Controllers
     public class CustomersController : Controller
     {
         private ApplicationDbContext _db;
+        private static readonly HttpClient httpClient;
+        static CustomersController()
+        {
+            httpClient = new HttpClient();
+        }
         public CustomersController(ApplicationDbContext db)
         {
             _db = db;
         }
+
         // GET: CustomerController
         public ActionResult Index()
         {
@@ -55,12 +66,13 @@ namespace TrashCollector.Controllers
         // POST: CustomerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Customer customer)
+        public async Task<ActionResult> CreateAsync(Models.Customer customer)
         {
             try
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 customer.IdentityUserId = userId;
+                await GetGeoCode(customer);
                 _db.Add(customer);
                 _db.SaveChanges();
                 CreateInitialPickup(customer);
@@ -91,7 +103,6 @@ namespace TrashCollector.Controllers
                 pickup.PickupZipCode = customer.ZipCode;
                 pickup.IsActive = true;
                 pickup.IsOneOff = true;
-                customer.pickupDay = pickup.ScheduledPickupDate;
                 _db.Pickups.Add(pickup);
                 _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
@@ -111,7 +122,7 @@ namespace TrashCollector.Controllers
         // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Customer customer)
+        public ActionResult Edit(int id, Models.Customer customer)
         {
             try
             {
@@ -133,7 +144,7 @@ namespace TrashCollector.Controllers
         // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPickup(int id, Customer customer)
+        public ActionResult EditPickup(int id, Models.Customer customer)
         {
             try
             {
@@ -159,7 +170,7 @@ namespace TrashCollector.Controllers
         // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Suspend(int id, Customer customer)
+        public ActionResult Suspend(int id, Models.Customer customer)
         {
             try
             {
@@ -197,7 +208,7 @@ namespace TrashCollector.Controllers
         // POST: CustomerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Customer customer)
+        public ActionResult Delete(int id, Models.Customer customer)
         {
             try
             {
@@ -209,7 +220,7 @@ namespace TrashCollector.Controllers
             }
         }
 
-        public void CreateInitialPickup(Customer customer)
+        public void CreateInitialPickup(Models.Customer customer)
         {
             DateTime today = DateTime.Today;
             // The (... + 7) % 7 ensures we end up with a value in the range [0, 6]
@@ -226,7 +237,64 @@ namespace TrashCollector.Controllers
 
         }
 
-        public void UpdateRegularPickups(Customer customer)
+        private string AddressParser(Models.Customer customer)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < customer.Address1.Length; i++)
+            {
+                if (customer.Address1[i] == ' ')
+                {
+                    sb.Append("+");
+                }
+                else
+                {
+                    sb.Append(customer.Address1[i]);
+                }
+            }
+            sb.Append(",+");
+            for (int i = 0; i < customer.City.Length; i++)
+            {
+                if (customer.City[i] == ' ')
+                {
+                    sb.Append("+");
+                }
+                else
+                {
+                    sb.Append(customer.City[i]);
+                }
+            }
+            sb.Append(",+");
+            for (int i = 0; i < customer.State.Length; i++)
+            {
+                if (customer.State[i] == ' ')
+                {
+                    sb.Append("+");
+                }
+                else
+                {
+                    sb.Append(customer.State[i]);
+                }
+            }
+            return sb.ToString();
+        }
+
+        private async Task<Models.Customer> GetGeoCode(Models.Customer customer)
+        {
+            string address = AddressParser(customer);
+            Uri geocodeURL = new Uri("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + APIKey.googleMapsApi);
+            var response = await httpClient.GetAsync(geocodeURL);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var task = response.Content.ReadAsStringAsync().Result;
+                JObject mapsData = JsonConvert.DeserializeObject<JObject>(task);
+                customer.Latitude = Convert.ToDecimal(mapsData["results"][0]["geometry"]["location"]["lat"]);
+                customer.Longitude = Convert.ToDecimal(mapsData["results"][0]["geometry"]["location"]["lng"]);
+            }
+
+            return customer;
+        }
+        public void UpdateRegularPickups(Models.Customer customer)
         {
             var pickupsToUpdate = _db.Pickups.Where(p => p.CustomerId == customer.Id).Where(p => p.IsOneOff == false).Where(p => p.IsComplete == false).ToList();
             foreach(Pickup pickup in pickupsToUpdate)
@@ -237,48 +305,49 @@ namespace TrashCollector.Controllers
             _db.SaveChanges();
         }
 
-        public decimal GetTotalBalance(Customer customer)
+        public decimal GetTotalBalance(Models.Customer customer)
         {
             var totalBalance = _db.Pickups.Where(p => p.IsComplete).Sum(p => p.AmountCharged);
             return totalBalance;
         }
-        public decimal GetMonthlyBalance(Customer customer)
+        public decimal GetMonthlyBalance(Models.Customer customer)
         {
             var monthlyBalance = _db.Pickups.Where(p => p.IsComplete).Where(p => p.ScheduledPickupDate.Month == DateTime.Now.Month).Sum(p=>p.AmountCharged);
             return monthlyBalance;
         }
 
-        public decimal GetCurrentMonthsPayments(Customer customer)
+        public decimal GetCurrentMonthsPayments(Models.Customer customer)
         {
             var currentMonthsPayments = _db.Pickups.Where(p => p.IsComplete).Where(p => p.ScheduledPickupDate.Month == DateTime.Now.Month).Sum(p => p.AmountPaid);
             return currentMonthsPayments;
         }
 
-        public decimal OpenBalance(Customer customer)
+        public decimal OpenBalance(Models.Customer customer)
         {
             var openBalance = GetTotalBalance(customer) - GetTotalPayments(customer);
             return openBalance;
             
         }
 
-        public decimal CurrentMonthBalance(Customer customer)
+        public decimal CurrentMonthBalance(Models.Customer customer)
         {
             var currentMonthBalance = GetMonthlyBalance(customer) - GetCurrentMonthsPayments(customer);
             return currentMonthBalance;
         }
-        public decimal GetTotalPayments(Customer customer)
+        public decimal GetTotalPayments(Models.Customer customer)
         {
             var totalPayments = _db.Pickups.Where(p => p.IsComplete).Sum(p => p.AmountPaid);
             return totalPayments;
         }
 
-        public void UpdateBalanceInfo(Customer customer)
+        public void UpdateBalanceInfo(Models.Customer customer)
         {
             customer.customerBalance = OpenBalance(customer);
             customer.currentMonthlyBalance = CurrentMonthBalance(customer);
             customer.currentMonthlyCharges = GetMonthlyBalance(customer);
             _db.SaveChanges();
         }
+
 
     }
 }
